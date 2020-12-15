@@ -1,8 +1,6 @@
 package com.aditya.employeepayrollapp.controller;
 
 import java.util.List;
-import java.util.Optional;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,12 +29,20 @@ public class EmployeePayrollController {
 	@Autowired
 	private IEmployeePayrollService employeePayrollService;
 
+	/**
+	 * @return
+	 */
 	@ApiOperation(value = "This api is used for demo purpose only.")
 	@GetMapping
 	public String demo() {
 		return "Hello World";
 	}
 
+	/**
+	 * @param empId
+	 * @return
+	 * @throws EmployeeException
+	 */
 	@ApiOperation(value = "This api used to fetch the employee details by empId.", notes = "Enter empId in long form.", response = Employee.class)
 	@GetMapping("/get/{empId}")
 	public ResponseEntity<Employee> getEmployeeDetails(@PathVariable long empId) throws EmployeeException {
@@ -44,6 +50,9 @@ public class EmployeePayrollController {
 		return new ResponseEntity<Employee>(emp, HttpStatus.OK);
 	}
 
+	/**
+	 * @return
+	 */
 	@ApiOperation(value = "This api is used to fetch all Employye details.", response = Employee.class)
 	@GetMapping("/getall")
 	public ResponseEntity<List<Employee>> getAllEmployees() {
@@ -65,6 +74,12 @@ public class EmployeePayrollController {
 		return new ResponseEntity<ResponseDTO>(new ResponseDTO("Added EmployeePayroll Data", emp), HttpStatus.CREATED);
 	}
 
+	/**
+	 * @param employeePayrollDTO
+	 * @param empId
+	 * @return
+	 * @throws EmployeeException
+	 */
 	@ApiOperation(value = "This api used to update the employee details for given empId", notes = "Enter empId in long form.", response = Employee.class)
 	@PutMapping("/update/{empId}")
 	public ResponseEntity<ResponseDTO> updateEmployee(@RequestBody EmployeePayrollDTO employeePayrollDTO,
@@ -73,6 +88,11 @@ public class EmployeePayrollController {
 		return new ResponseEntity<ResponseDTO>(new ResponseDTO("Updated EmployeePayroll Data", emp), HttpStatus.OK);
 	}
 
+	/**
+	 * @param empId
+	 * @return
+	 * @throws EmployeeException
+	 */
 	@ApiOperation(value = "This api used to delete the employee details for given empId.", notes = "Enter empId in long form.", response = Employee.class)
 	@DeleteMapping("/delete/{empId}")
 	public ResponseEntity<ResponseDTO> deleteEmployee(@PathVariable long empId) throws EmployeeException {
