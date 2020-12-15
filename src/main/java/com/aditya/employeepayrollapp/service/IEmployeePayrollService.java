@@ -14,7 +14,9 @@ public interface IEmployeePayrollService {
 
 	Employee updateEmployeeById(long empId, EmployeePayrollDTO employeePayrollDTO) throws EmployeeException;
 
-	Employee deleteEmployeeById(long empId) throws EmployeeException;
+	String deleteEmployeeById(long empId) throws EmployeeException;
 
 	List getAllEmployeeData();
+
+	Employee getEmployeeData(String emailId) throws EmployeeException;
 }

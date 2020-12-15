@@ -5,16 +5,25 @@ import javax.validation.constraints.Pattern;
 
 public class EmployeePayrollDTO {
 
-	@Pattern(regexp = "^[A-Z]{1}[a-z]{2,9}$" , message = "Invalid name")
+	@Pattern(regexp = "^[A-Z]{1}[a-z]{2,9}$", message = "Invalid name")
 	public String name;
 	@Min(value = 2, message = "Salary digit should be greater than 1")
 	public long salary;
-	
+	public String emailId;
+
 	public EmployeePayrollDTO(String name, long salary) {
 		super();
 		this.name = name;
 		this.salary = salary;
 	}
-	
-	public EmployeePayrollDTO() {}
+
+	public EmployeePayrollDTO(String name, long salary, String emailId) {
+		super();
+		this.name = name;
+		this.salary = salary;
+		this.emailId = emailId;
+	}
+
+	public EmployeePayrollDTO() {
+	}
 }

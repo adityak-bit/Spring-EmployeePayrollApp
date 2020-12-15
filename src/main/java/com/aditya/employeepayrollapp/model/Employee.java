@@ -5,6 +5,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import org.hibernate.validator.constraints.UniqueElements;
+
 import com.aditya.employeepayrollapp.DTO.EmployeePayrollDTO;
 
 import lombok.Getter;
@@ -20,8 +22,17 @@ public class Employee {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long empId;
+	private String emailId;
 	private String name;
 	private long salary;
+
+	public String getEmailId() {
+		return emailId;
+	}
+
+	public void setEmailId(String emailId) {
+		this.emailId = emailId;
+	}
 
 	public Employee() {
 	}
@@ -29,6 +40,7 @@ public class Employee {
 	public Employee(EmployeePayrollDTO employeePayrollDTO) {
 		this.name = employeePayrollDTO.name;
 		this.salary = employeePayrollDTO.salary;
+		this.emailId = employeePayrollDTO.emailId;
 	}
 
 	public long getEmpId() {

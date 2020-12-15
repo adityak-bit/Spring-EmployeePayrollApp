@@ -95,9 +95,15 @@ public class EmployeePayrollController {
 	 */
 	@ApiOperation(value = "This api used to delete the employee details for given empId.", notes = "Enter empId in long form.", response = Employee.class)
 	@DeleteMapping("/delete/{empId}")
-	public ResponseEntity<ResponseDTO> deleteEmployee(@PathVariable long empId) throws EmployeeException {
-		Employee emp = employeePayrollService.deleteEmployeeById(empId);
-		return new ResponseEntity<ResponseDTO>(new ResponseDTO("Deleted EmployeePayroll Data", emp), HttpStatus.OK);
+	public ResponseEntity<String> deleteEmployee(@PathVariable long empId) throws EmployeeException {
+		String msg = employeePayrollService.deleteEmployeeById(empId);
+		return new ResponseEntity<>(msg, HttpStatus.OK);
+	}
+	
+	@GetMapping("/{emailId}")
+	public ResponseEntity<Employee> getEmployeeDetailsByEmail(@PathVariable String emailId) throws EmployeeException{
+		Employee emp = employeePayrollService.getEmployeeData(emailId);
+		return new ResponseEntity<Employee>(emp, HttpStatus.OK);
 	}
 
 }

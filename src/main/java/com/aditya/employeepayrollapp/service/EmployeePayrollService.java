@@ -45,10 +45,15 @@ public class EmployeePayrollService implements IEmployeePayrollService {
 	}
 
 	@Override
-	public Employee deleteEmployeeById(long empId) throws EmployeeException {
+	public String deleteEmployeeById(long empId) throws EmployeeException {
 		Employee emp = getEmployeeData(empId);
 		employeePayrollRepo.deleteById(empId);
-		return emp;
+		return "This user is deleted";
+	}
+	
+	@Override
+	public Employee getEmployeeData(String emailId) throws EmployeeException {
+		return employeePayrollRepo.findByEmailId(emailId).orElseThrow(() -> new EmployeeException("Invalid user id"));
 	}
 
 }
