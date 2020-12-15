@@ -3,6 +3,8 @@ package com.aditya.employeepayrollapp.controller;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,9 +18,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.aditya.employeepayrollapp.DTO.EmployeePayrollDTO;
+import com.aditya.employeepayrollapp.DTO.ResponseDTO;
 import com.aditya.employeepayrollapp.exception.EmployeeException;
 import com.aditya.employeepayrollapp.model.Employee;
 import com.aditya.employeepayrollapp.service.IEmployeePayrollService;
+
+import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/employee")
@@ -26,39 +31,53 @@ public class EmployeePayrollController {
 	@Autowired
 	private IEmployeePayrollService employeePayrollService;
 
+	@ApiOperation(value = "This api is used for demo purpose only.")
 	@GetMapping
 	public String demo() {
 		return "Hello World";
 	}
 
+	@ApiOperation(value = "This api used to fetch the employee details by empId.", notes = "Enter empId in long form.", response = Employee.class)
 	@GetMapping("/get/{empId}")
-	public Employee getEmployeeDetails(@PathVariable long empId) throws EmployeeException {
-		return employeePayrollService.getEmployeeData(empId);
+	public ResponseEntity<Employee> getEmployeeDetails(@PathVariable long empId) throws EmployeeException {
+		Employee emp = employeePayrollService.getEmployeeData(empId);
+		return new ResponseEntity<Employee>(emp, HttpStatus.OK);
 	}
 
+	@ApiOperation(value = "This api is used to fetch all Employye details.", response = Employee.class)
 	@GetMapping("/getall")
-	public ResponseEntity<List<Employee>> getAllEmployees(){
-		List employeesList = employeePayrollService.getAllEmployeeData();
+	public ResponseEntity<List<Employee>> getAllEmployees() {
+		List<Employee> employeesList = employeePayrollService.getAllEmployeeData();
 		return new ResponseEntity<>(employeesList, HttpStatus.OK);
 	}
-	
+
+	/**
+	 * This API is used to add new Employee to database.
+	 * 
+	 * @param employeePayrollDTO
+	 * @return
+	 */
+	@ApiOperation(value = "This api used to create new Employee", notes = "Enter name with first capital and length in 3-10 \n Enter Salary with digit length in 3-10", response = Employee.class)
 	@PostMapping("/create")
-	public ResponseEntity<String> addEmployee(@RequestBody EmployeePayrollDTO employeePayrollDTO) {
-		employeePayrollService.addEmployeePayrollData(employeePayrollDTO);
-		return new ResponseEntity<String>("Added EmployeePayroll Data", HttpStatus.CREATED);
+	public ResponseEntity<ResponseDTO> addEmployee(@RequestBody @Valid EmployeePayrollDTO employeePayrollDTO) {
+		System.out.println("In create api");
+		Employee emp = employeePayrollService.addEmployeePayrollData(employeePayrollDTO);
+		return new ResponseEntity<ResponseDTO>(new ResponseDTO("Added EmployeePayroll Data", emp), HttpStatus.CREATED);
 	}
 
+	@ApiOperation(value = "This api used to update the employee details for given empId", notes = "Enter empId in long form.", response = Employee.class)
 	@PutMapping("/update/{empId}")
-	public ResponseEntity<String> updateEmployee(@RequestBody EmployeePayrollDTO employeePayrollDTO,
+	public ResponseEntity<ResponseDTO> updateEmployee(@RequestBody EmployeePayrollDTO employeePayrollDTO,
 			@PathVariable long empId) throws EmployeeException {
-		employeePayrollService.updateEmployeeById(empId, employeePayrollDTO);
-		return new ResponseEntity<String>("Employee updated", HttpStatus.OK);
+		Employee emp = employeePayrollService.updateEmployeeById(empId, employeePayrollDTO);
+		return new ResponseEntity<ResponseDTO>(new ResponseDTO("Updated EmployeePayroll Data", emp), HttpStatus.OK);
 	}
 
+	@ApiOperation(value = "This api used to delete the employee details for given empId.", notes = "Enter empId in long form.", response = Employee.class)
 	@DeleteMapping("/delete/{empId}")
-	public ResponseEntity<String> deleteEmployee(@RequestBody EmployeePayrollDTO employeePayrollDTO,
-			@PathVariable long empId) throws EmployeeException {
-		employeePayrollService.deleteEmployeeById(empId);
-		return new ResponseEntity<String>("Employee deleted", HttpStatus.OK);
+	public ResponseEntity<ResponseDTO> deleteEmployee(@PathVariable long empId) throws EmployeeException {
+		Employee emp = employeePayrollService.deleteEmployeeById(empId);
+		return new ResponseEntity<ResponseDTO>(new ResponseDTO("Deleted EmployeePayroll Data", emp), HttpStatus.OK);
 	}
+
 }

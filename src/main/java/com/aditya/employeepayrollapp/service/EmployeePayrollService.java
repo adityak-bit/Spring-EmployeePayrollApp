@@ -28,7 +28,12 @@ public class EmployeePayrollService implements IEmployeePayrollService {
 	}
 
 	@Override
-	public void updateEmployeeById(long empId, EmployeePayrollDTO employeePayrollDTO) throws EmployeeException {
+	public List<Employee> getAllEmployeeData() {
+		return employeePayrollRepo.findAll();
+	}
+
+	@Override
+	public Employee updateEmployeeById(long empId, EmployeePayrollDTO employeePayrollDTO) throws EmployeeException {
 		Employee emp = getEmployeeData(empId);
 		if (employeePayrollDTO.name != null) {
 			emp.setName(employeePayrollDTO.name);
@@ -37,16 +42,17 @@ public class EmployeePayrollService implements IEmployeePayrollService {
 			emp.setSalary(employeePayrollDTO.salary);
 		}
 		employeePayrollRepo.save(emp);
+		return emp;
 	}
 
 	@Override
-	public void deleteEmployeeById(long empId) throws EmployeeException {
+	public Employee deleteEmployeeById(long empId) throws EmployeeException {
+		Employee emp = employeePayrollRepo.findById(empId).orElseThrow(() -> new EmployeeException("Invalid User id"));
+		if (emp == null)
+			return null;
+		Employee emp1 = emp;
 		employeePayrollRepo.deleteById(empId);
+		return emp1;
 	}
-	
-	@Override
-	public List getAllEmployeeData() {
-		return employeePayrollRepo.findAll();
-	} 
 
 }
