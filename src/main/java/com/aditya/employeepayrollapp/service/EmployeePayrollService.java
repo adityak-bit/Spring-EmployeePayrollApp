@@ -22,8 +22,8 @@ public class EmployeePayrollService implements IEmployeePayrollService {
 
 	@Override
 	public Employee addEmployeePayrollData(EmployeePayrollDTO employeePayrollDTO) {
-		Employee emp = new Employee(employeePayrollDTO);
-		modelMapper.map(employeePayrollDTO, emp);
+
+		Employee emp = modelMapper.map(employeePayrollDTO, Employee.class);
 		return employeePayrollRepo.save(emp);
 	}
 
@@ -40,8 +40,14 @@ public class EmployeePayrollService implements IEmployeePayrollService {
 	@Override
 	public Employee updateEmployeeById(long empId, EmployeePayrollDTO employeePayrollDTO) throws EmployeeException {
 		Employee emp = getEmployeeData(empId);
-		modelMapper.map(employeePayrollDTO, emp);
-		return employeePayrollRepo.save(getEmployeeData(empId));
+//		modelMapper.map(employeePayrollDTO, emp);
+		emp.setName(employeePayrollDTO.getName());
+		emp.setSalary(employeePayrollDTO.getSalary());
+		emp.setDepartment(employeePayrollDTO.getDepartment());
+		emp.setGender(employeePayrollDTO.getGender());
+		emp.setStartDate(employeePayrollDTO.getStartDate());
+		emp.setProfile(employeePayrollDTO.getStartDate());
+		return employeePayrollRepo.save(emp);
 	}
 
 	@Override
@@ -50,10 +56,16 @@ public class EmployeePayrollService implements IEmployeePayrollService {
 		employeePayrollRepo.deleteById(empId);
 		return "This user is deleted";
 	}
-	
+
 	@Override
 	public Employee getEmployeeData(String emailId) throws EmployeeException {
-		return employeePayrollRepo.findByEmailId(emailId).orElseThrow(() -> new EmployeeException("Invalid user id"));
+		// TODO Auto-generated method stub
+		return null;
 	}
+
+//	@Override
+//	public Employee getEmployeeData(String emailId) throws EmployeeException {
+//		return employeePayrollRepo.findByEmailId(emailId).orElseThrow(() -> new EmployeeException("Invalid user id"));
+//	}
 
 }

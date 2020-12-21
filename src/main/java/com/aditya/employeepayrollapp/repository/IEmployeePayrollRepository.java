@@ -10,8 +10,4 @@ import com.aditya.employeepayrollapp.model.Employee;
 @Repository
 public interface IEmployeePayrollRepository extends JpaRepository<Employee, Long> {
 
-	Optional<Employee> findByEmailId(String emailId);
-	
-	Optional<Employee> findByEmailIdAndSalary(String emailId,long salary);
-
 }
